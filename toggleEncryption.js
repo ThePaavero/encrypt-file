@@ -1,6 +1,7 @@
 const Cryptr = require('cryptr')
 const fs = require('fs')
 const md5 = require('md5')
+const passPhraseMinimumLength = 4
 
 const HEADER_STRING = '<<< FILE IS ENCRYPTED >>>'
 
@@ -8,8 +9,13 @@ const filePath = process.argv[2]
 const passPhrase = process.argv[3]
 const cryptr = new Cryptr(passPhrase)
 
-if (passPhrase.length < 4) {
-  console.log('Pass phrase must be at least 4 characters long. Aborting.')
+if (!fs.existsSync(filePath)) {
+  console.log('File path not correct.')
+  return
+}
+
+if (passPhrase.length < passPhraseMinimumLength) {
+  console.log('Pass phrase must be at least ' + passPhraseMinimumLength + ' characters long. Aborting.')
   return
 }
 
