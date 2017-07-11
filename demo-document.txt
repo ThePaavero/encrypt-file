@@ -1,1 +1,2 @@
-I'm a string. Not encrypted, if you can read this!
+This is the original, unencrypted content of this TXT file. :)
+Another row.

@@ -16,7 +16,16 @@ if (passPhrase.length < 4) {
 const currentContent = fs.readFileSync(filePath).toString()
 if (currentContent.indexOf(HEADER_STRING) === 0) {
   console.log('File is already encrypted, decrypting...')
-  console.log('File has now been encrypted.')
+  const lines = currentContent.split('\n')
+  const md5Hash = lines[1]
+  const stringToDecrypt = lines[2]
+  const newContent = cryptr.decrypt(stringToDecrypt)
+  if (md5(newContent) !== md5Hash) {
+    console.log('Incorrect pass phrase. File *not* decrypted.')
+    return
+  }
+  fs.writeFileSync(filePath, newContent)
+  console.log('File has now been decrypted.')
   return
 }
 
@@ -26,4 +35,6 @@ const newContent = HEADER_STRING +
   '\n' +
   cryptr.encrypt(currentContent)
 
-console.log(newContent)
+fs.writeFileSync(filePath, newContent)
+
+console.log('File has been encrypted.')
